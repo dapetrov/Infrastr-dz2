@@ -15,6 +15,8 @@ npm ci
 npm start
 ```
 
+test
+
 Как запустить e2e тесты:
 
 ```sh
