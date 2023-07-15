@@ -63,6 +63,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Set Git identity
+        run: |
+          git config --global user.email "petrov082011@mail.ru"
+          git config --global user.name "Daniil Petrov"
+
       - name: Deploy to GitHub Pages
         run: npm run deploy
         env:
