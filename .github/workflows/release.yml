@@ -31,7 +31,9 @@ jobs:
           RELEASE_TAG="${{ github.ref }}"
           echo "RELEASE_VERSION: $RELEASE_VERSION"
           echo "RELEASE_TAG: $RELEASE_TAG"
-          if [[ "v${RELEASE_VERSION}" != "${RELEASE_TAG}" ]]; then
+          if [[ "v${RELEASE_VERSION}" == "${RELEASE_TAG#refs/tags/}" ]]; then
+            echo "Release version matches release tag"
+          else
             echo "Error: Release version does not match release tag"
             exit 1
           fi
