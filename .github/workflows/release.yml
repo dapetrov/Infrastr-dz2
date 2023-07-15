@@ -61,6 +61,8 @@ jobs:
           echo "$CHANGES"
 
       - name: Run release script
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npm run injector
 
       - name: Build
