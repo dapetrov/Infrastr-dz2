@@ -69,4 +69,12 @@ jobs:
       - name: Deploy to GitHub Pages
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npm run deploy
+        run: |
+          git config --global user.name "Daniil Petrov"
+          git config --global user.email "petrov082011@mail.ru"
+          git checkout --orphan gh-pages
+          git rm -rf .
+          cp -R build/* .
+          git add -A
+          git commit -m "Deploy to GitHub Pages"
+          git push origin gh-pages --force
