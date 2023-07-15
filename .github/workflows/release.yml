@@ -29,7 +29,7 @@ jobs:
         run: |
           RELEASE_VERSION=$(cat ${{ steps.get_version.outputs.version }})
           RELEASE_TAG=${{ github.ref }}
-          if [[ "$RELEASE_VERSION" != "$RELEASE_TAG" ]]; then
+          if [[ "${RELEASE_VERSION}" != "${RELEASE_TAG#refs/tags/}" ]]; then
             echo "Error: Release version does not match release tag"
             exit 1
           fi
