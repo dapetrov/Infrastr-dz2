@@ -27,7 +27,7 @@ jobs:
 
       - name: Check version and tag match #версия релиза должна соответствовать релизному тегу
         run: |
-          RELEASE_VERSION=$(cat ${{ steps.get_version.outputs.version }})
+          RELEASE_VERSION="${{ steps.get_version.outputs.version }}"
           RELEASE_TAG=${{ github.ref }}
           if [[ "${RELEASE_VERSION}" != "${RELEASE_TAG#refs/tags/}" ]]; then
             echo "Error: Release version does not match release tag"
