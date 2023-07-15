@@ -1,4 +1,4 @@
-import * as github from "@actions/github";
+const github = require("@actions/github");
 const axios = require("axios");
 const moment = require("moment");
 
