@@ -25,10 +25,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Check version and tag match #версия релиза должна соответствовать релизному тегу
+      - name: Check version and tag match
         run: |
           RELEASE_VERSION="${{ steps.get_version.outputs.version }}"
-          RELEASE_TAG=${{ github.ref }}
+          RELEASE_TAG="${{ github.ref }}"
+          echo "RELEASE_VERSION: $RELEASE_VERSION"
+          echo "RELEASE_TAG: $RELEASE_TAG"
           if [[ "v${RELEASE_VERSION}" != "${RELEASE_TAG}" ]]; then
             echo "Error: Release version does not match release tag"
             exit 1
