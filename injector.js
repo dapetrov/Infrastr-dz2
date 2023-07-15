@@ -4,9 +4,9 @@ const moment = require("moment");
 
 const tag = github.context.ref;
 const actor = github.context.actor;
-const version = tag.slice(1);
+const version = tag.slice(11);
 
-const changelog = process.env.CHANGELOG;
+const changelog = process.env.CHANGES;
 const accessToken = process.env.GH_TOKEN;
 
 const currentDate = moment().format("DD-MM-YYYY");
