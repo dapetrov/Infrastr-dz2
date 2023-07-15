@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get release version #получаем версию релиза
+        id: get_version
+        run: echo "::set-output name=version::${GITHUB_REF#refs/tags/v}"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check version and tag match #версия релиза должна соответствовать релизному тегу
+        run: |
+          RELEASE_VERSION=$(cat ${{ steps.get_version.outputs.version }})
+          RELEASE_TAG=${{ github.ref }}
+          if [[ "$RELEASE_VERSION" != "$RELEASE_TAG" ]]; then
+            echo "Error: Release version does not match release tag"
+            exit 1
+          fi
+
+      - name: Get previous release tag #получаем предыдущий релизный тег
+        id: get_previous_tag
+        run: |
+          PREVIOUS_TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags='v*' --max-count=1))
+          echo "::set-output name=previous_tag::$PREVIOUS_TAG"
+
+      - name: Generate changelog #формируем changelog по истории коммитов от предыдущего релизного тэга
+        id: generate_changelog
+        run: |
+          PREVIOUS_TAG=${{ steps.get_previous_tag.outputs.previous_tag }}
+          CHANGELOG=$(git log --pretty=format:"- %s (%an)" $PREVIOUS_TAG..HEAD)
+          echo "::set-output name=changelog::$CHANGELOG"
+
+      - name: Use changelog #вывод changelog
+        run: |
+          CHANGES=${{ steps.generate_changelog.outputs.changelog }}
+          echo "Changelog:"
+          echo "$CHANGES"
+
+      - name: Run release script
+        run: npm run injector
+
+      - name: Build
+        run: npm run build
