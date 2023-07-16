@@ -32,11 +32,12 @@ jobs:
 
       - name: Setup Commitlint
         run: npm install -g @commitlint/cli @commitlint/config-conventional
-      - name: Lint commit messages
-        run: git log --pretty=format:"%s" ${{ github.sha }} | npx commitlint
 
-      - name: Lint commit messages2
-        run: commitlint --from=HEAD~1
+      - name: Lint commit messages
+        run: |
+          COMMIT_SHA=${{ github.sha }}
+          echo "COMMIT_SHA: $COMMIT_SHA"
+          git log --pretty=format:"%s" $COMMIT_SHA | npx commitlint
 
       - name: Check test results
         run: |
