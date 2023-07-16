@@ -1,0 +1,47 @@
+# git-cliff ~ default configuration file
+# https://git-cliff.org/docs/configuration
+#
+# Lines starting with "#" are comments.
+# Configuration options are organized into tables and keys.
+# See documentation for more information on available options.
+
+[changelog]
+body = """
+{% set additional_text = "" %}\
+{% if previous %}\
+    {% if previous.version %}\
+        {% set additional_text = "Version " ~ previous.version ~ " - " %}\
+    {% endif %}\
+{% endif %}\
+{% if version %}\
+## Changelog {{additional_text}}{{version}}
+{% else %}\
+## Unreleased
+{% endif %}\
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | capitalize }}
+{% for commit in commits %}
+- {% if commit.breaking %}**[Breaking Change]** {% endif %}{{ commit.message | capitalize }} ({{commit.committer.name}}, {{commit.committer.timestamp | date(format="%d.%m.%Y")}})
+{% endfor %}
+{% endfor %}
+"""
+trim = true
+
+[git]
+conventional_commits = true
+filter_unconventional = true
+split_commits = false
+
+[git.commit_parsers]
+message = [
+  { message = "^feat", group = "Features" },
+  { message = "^fix", group = "Bug fixes" },
+  { message = "^doc", group = "Documentation" },
+  { message = "^perf", group = "Performance" },
+  { message = "^refactor", group = "Refactor" },
+  { message = "^style", group = "Styling" },
+  { message = "^test", group = "Tests" },
+  { message = "^chore\\(release\\): prepare for", skip = true },
+  { message = "^chore", group = "Miscellaneous" },
+  { body = ".*security", group = "Security" },
+]
