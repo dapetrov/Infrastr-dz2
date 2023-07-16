@@ -4,21 +4,27 @@ runs:
   using: "composite"
   steps:
     - name: Checkout repository
+      shell: bash
       uses: actions/checkout@v2
 
     - name: Set up Node.js
+      shell: bash
       uses: actions/setup-node@v3
       with:
         node-version: "16"
 
     - name: Install dependencies
+      shell: bash
       run: npm ci
 
     - name: Run playwright
+      shell: bash
       run: npx playwright install
 
     - name: Run e2e tests
+      shell: bash
       run: npx playwright test --project=chromium
 
     - name: Run unit tests
+      shell: bash
       run: npm test
