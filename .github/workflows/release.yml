@@ -59,6 +59,11 @@ jobs:
           echo "current_tag=$current_tag">>"$GITHUB_ENV"
           echo "prev_tag=$prev_tag">>"$GITHUB_ENV"
 
+      - name: Display Current and Previous Tags
+        run: |
+          echo "Current Tag: $current_tag"
+           echo "Previous Tag: $prev_tag"
+
       - name: Changelog
         id: Changelog
         run: |
