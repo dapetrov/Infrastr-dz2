@@ -55,7 +55,7 @@ jobs:
         id: get_tag
         run: |
           current_tag=$(echo "${GITHUB_REF}" | awk -F/ '{print $3}')
-          prev_tag=$(git describe --abbrev=0 --match="v*" --tags HEAD^)
+          prev_tag=$(git describe --tags --abbrev=0 ${current_tag}^)
           echo "current_tag=$current_tag">>"$GITHUB_ENV"
           echo "prev_tag=$prev_tag">>"$GITHUB_ENV"
 
