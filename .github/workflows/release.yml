@@ -46,7 +46,7 @@ jobs:
         id: git-cliff
         with:
           config: cliff.toml
-          args: --previous
+          args: --latest
 
       - name: Print the changelog
         run: echo "${{ steps.git-cliff.outputs.content }}"
