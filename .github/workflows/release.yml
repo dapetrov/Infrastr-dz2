@@ -54,15 +54,15 @@ jobs:
       - name: Get Current Tag
         id: get_tag
         run: |
-          current_tag=$(echo "${GITHUB_REF}" | awk -F/ '{print $3}')
-          prev_tag=$(git describe --tags --abbrev=0 ${current_tag}^)
-          echo "tag=$current_tag">>"$GITHUB_ENV"
+          current_tag=$(echo "${github.ref}")
+          prev_tag=$(git describe --tags --abbrev=0 ${current_tag}~1)
+          echo "current_tag=$current_tag">>"$GITHUB_ENV"
           echo "prev_tag=$prev_tag">>"$GITHUB_ENV"
 
       - name: Changelog
         id: Changelog
         run: |
-          git_log=$(git log --pretty=format:"- %s" "${{ env.prev_tag }}..${{ env.tag }}")
+          git_log=$(git log --pretty=format:"- %s" "${{ env.prev_tag }}..${{ env.current_tag }}")
           echo "::set-output name=Changelog::${git_log}"
 
       - name: Run release script
