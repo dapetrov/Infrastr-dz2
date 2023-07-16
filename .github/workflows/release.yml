@@ -41,13 +41,6 @@ jobs:
             exit 1
           fi
 
-      - name: Get previous release tag #получаем предыдущий релизный тег
-        id: get_previous_tag
-        run: |
-          PREVIOUS_COMMIT=$(git rev-list --tags='v*' --max-count=2 --skip=1 --pretty=%H)
-          PREVIOUS_TAG=$(git describe --tags --abbrev=0 $PREVIOUS_COMMIT)
-          echo "::set-output name=previous_tag::$PREVIOUS_TAG"
-
       - name: Changelog generate
         uses: orhun/git-cliff-action@v2
         id: git-cliff
@@ -56,7 +49,7 @@ jobs:
           args: --latest
 
       - name: Print the changelog
-        run: cat ${{ steps.git-cliff.outputs.content }}
+        run: echo "${{ steps.git-cliff.outputs.content }}"
 
       - name: Run release script
         env:
