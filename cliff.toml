@@ -33,15 +33,15 @@ filter_unconventional = true
 split_commits = false
 
 [git.commit_parsers]
-message = [
+message =  [
   { message = "^feat", group = "Features" },
   { message = "^fix", group = "Bug fixes" },
   { message = "^doc", group = "Documentation" },
-  { message = "^perf", group = "Performance" },
+  { message = "^perf", group = "Perfomance" },
   { message = "^refactor", group = "Refactor" },
   { message = "^style", group = "Styling" },
   { message = "^test", group = "Tests" },
   { message = "^chore\\(release\\): prepare for", skip = true },
-  { message = "^chore", group = "Miscellaneous" },
+  { message = "^chore", group = "MIscellanous" },
   { body = ".*security", group = "Security" },
 ]
