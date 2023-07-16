@@ -65,9 +65,6 @@ jobs:
           git_log=$(git log --pretty=format:"- %s" "${{ env.prev_tag }}..${{ env.tag }}")
           echo "::set-output name=Changelog::${git_log}"
 
-      - name: Install Dependencies
-        run: npm install
-
       - name: Run release script
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
