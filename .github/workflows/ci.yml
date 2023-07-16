@@ -35,6 +35,9 @@ jobs:
       - name: Lint commit messages
         run: git log --pretty=format:"%s" ${{ github.sha }} | npx commitlint
 
+      - name: Lint commit messages2
+        run: commitlint --from=HEAD~1
+
       - name: Check test results
         run: |
           if [ ${{ job.status }} != "success" ]; then
