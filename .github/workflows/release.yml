@@ -77,7 +77,7 @@ jobs:
         run: npm run injector
 
       - name: Run tests
-        uses: ./.github/ci.yml
+        uses: ./.github/test
 
       - name: Build
         run: npm run build
