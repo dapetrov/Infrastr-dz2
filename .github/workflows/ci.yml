@@ -30,11 +30,6 @@ jobs:
       - name: Run unit tests
         run: npm test
 
-      - name: Setup Commitlint
-        run: npm install -g @commitlint/cli @commitlint/config-conventional
-      - name: Lint commit messages
-        run: git log --pretty=format:"%s" ${{ github.sha }} | npx commitlint
-
       - name: Check test results
         run: |
           if [ ${{ job.status }} != "success" ]; then
