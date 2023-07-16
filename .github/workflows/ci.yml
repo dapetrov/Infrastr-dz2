@@ -37,7 +37,7 @@ jobs:
         run: |
           COMMIT_SHA=${{ github.sha }}
           echo "COMMIT_SHA: $COMMIT_SHA"
-          git log --pretty=format:"%s" ${{ github.sha }} | npx commitlint
+          git log --pretty=format:"%s" ${{ github.sha }} | npx commitlint 2>&1
 
       - name: Check test results
         run: |
