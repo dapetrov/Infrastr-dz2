@@ -48,22 +48,20 @@ jobs:
           PREVIOUS_TAG=$(git describe --tags --abbrev=0 $PREVIOUS_COMMIT)
           echo "::set-output name=previous_tag::$PREVIOUS_TAG"
 
-      - name: Generate a changelog
+      - name: Changelog generate
         uses: orhun/git-cliff-action@v2
         id: git-cliff
         with:
           config: cliff.toml
-          args: --verbose
-        env:
-          OUTPUT: CHANGELOG.md
+          args: --latest
 
       - name: Print the changelog
-        run: cat ${{ steps.git-cliff.outputs.changelog }}
+        run: cat ${{ steps.git-cliff.outputs.content }}
 
       - name: Run release script
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          CHANGES: ${{ steps.git-cliff.outputs.changelog }}
+          CHANGES: ${{ steps.git-cliff.outputs.content }}
         run: npm run injector
 
       - name: Build
