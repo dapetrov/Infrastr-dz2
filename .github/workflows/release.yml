@@ -44,8 +44,11 @@ jobs:
       - name: Get previous release tag #получаем предыдущий релизный тег
         id: get_previous_tag
         run: |
-          PREVIOUS_TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags='v*' --max-count=1))
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0  $(git rev-list --tags='v*' --max-count=1))
           echo "::set-output name=previous_tag::$PREVIOUS_TAG"
+
+      - name: Print previous release tag
+        run: echo ${{ steps.get_previous_tag.outputs.previous_tag }}
 
       - name: Generate changelog #формируем changelog по истории коммитов от предыдущего релизного тэга
         id: generate_changelog
