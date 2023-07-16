@@ -41,40 +41,43 @@ jobs:
             exit 1
           fi
 
-      # - name: Changelog generate
-      #   uses: orhun/git-cliff-action@v2
-      #   id: git-cliff
-      #   with:
-      #     config: cliff.toml
-      #     args: --latest
+      - name: Changelog generate
+        uses: orhun/git-cliff-action@v2
+        id: git-cliff
+        with:
+          config: cliff.toml
+          args: --latest
 
-      # - name: Print the changelog
-      #   run: echo "${{ steps.git-cliff.outputs.content }}"
+      - name: Print the changelog
+        run: echo "${{ steps.git-cliff.outputs.content }}"
 
-      - name: Get Current Tag
-        id: get_tag
-        run: |
-          current_tag=$(echo "${GITHUB_REF}" | awk -F/ '{print $3}')
-          prev_tag=$(git describe --tags --abbrev=0 ${current_tag}^)
-          echo "current_tag=$current_tag">>"$GITHUB_ENV"
-          echo "prev_tag=$prev_tag">>"$GITHUB_ENV"
+      # - name: Get Current Tag
+      #   id: get_tag
+      #   run: |
+      #     current_tag=$(echo "${GITHUB_REF}" | awk -F/ '{print $3}')
+      #     prev_tag=$(git describe --tags --abbrev=0 ${current_tag}^)
+      #     echo "current_tag=$current_tag">>"$GITHUB_ENV"
+      #     echo "prev_tag=$prev_tag">>"$GITHUB_ENV"
 
-      - name: Display Current and Previous Tags
-        run: |
-          echo "Current Tag: $current_tag"
-           echo "Previous Tag: $prev_tag"
+      # - name: Display Current and Previous Tags
+      #   run: |
+      #     echo "Current Tag: $current_tag"
+      #      echo "Previous Tag: $prev_tag"
 
-      - name: Changelog
-        id: Changelog
-        run: |
-          git_log=$(git log --pretty=format:"- %s" "${{ env.prev_tag }}..${{ env.current_tag }}")
-          echo "::set-output name=Changelog::${git_log}"
+      # - name: Changelog
+      #   id: Changelog
+      #   run: |
+      #     git_log=$(git log --pretty=format:"- %s" "${{ env.prev_tag }}..${{ env.current_tag }}")
+      #     echo "::set-output name=Changelog::${git_log}"
 
       - name: Run release script
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          CHANGES: ${{ steps.Changelog.outputs.Changelog }}
+          CHANGES: ${{ steps.git-cliff.outputs.content }}
         run: npm run injector
+
+      - name: Run tests
+        uses: ./.github/ci.yml
 
       - name: Build
         run: npm run build
