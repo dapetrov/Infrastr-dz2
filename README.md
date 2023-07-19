@@ -13,3 +13,4 @@ git tag v1
 git push origin v1
 
 Срабатывает release.yml и выполняет необходимые действия
+test
